@@ -1,0 +1,17 @@
+{
+  "name": "capitec-assessment",
+  "version": "1.0.0",
+  "description": "Technical assessment for Capitec Test Automation Engineer post",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^24.0.14"
+  },
+  "dependencies": {
+    "typescript": "^5.8.3"
+  }
+}
