@@ -16,13 +16,16 @@
     "skipLibCheck": true,
     "baseUrl": "./",
 
-    "paths": {},
+    "paths": {
+      "@fixtures/*": ["src/fixtures/*"],
+      "@online-store/*": ["src/component/online-store/*"],
+      "@utils/*": ["src/utils/*"],
+    },
 
     "sourceMap": true
   },
 
   "include": ["playwright.config.ts", "src/**/*.ts",],
 
-  // Exclude build output and node_modules
   "exclude": ["dist", "node_modules"]
 }
