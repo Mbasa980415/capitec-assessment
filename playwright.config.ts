@@ -12,7 +12,10 @@ export default defineConfig({
   retries: 1,
   workers: 4,
 
-  reporter: [["list", { printSteps: true }], ["html"], ["blob"]],
+  reporter: [
+    ['list', { printSteps: true }],
+    ['html', { outputFolder: 'playwright-report', open: 'on-failure' }],
+  ],
   use: {
     trace: "on-first-retry",
     screenshot: "only-on-failure",
