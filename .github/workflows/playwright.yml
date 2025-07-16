@@ -15,6 +15,14 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+
+    - name: Load .env File
+      run: |
+        echo "Loading environment variables..."
+        echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
+        echo "UI_USERNAME=${{ secrets.UI_USERNAME }}" >> $GITHUB_ENV
+        echo "UI_PASSWORD=${{ secrets.UI_PASSWORD }}" >> $GITHUB_ENV
+
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
