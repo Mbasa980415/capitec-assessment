@@ -22,6 +22,9 @@ jobs:
         echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
         echo "UI_USERNAME=${{ secrets.UI_USERNAME }}" >> $GITHUB_ENV
         echo "UI_PASSWORD=${{ secrets.UI_PASSWORD }}" >> $GITHUB_ENV
+        echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> $GITHUB_ENV
+        echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> $GITHUB_ENV
+        echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> $GITHUB_ENV
 
     - name: Run Playwright tests
       run: npx playwright test
