@@ -3,16 +3,27 @@
   "version": "1.0.0",
   "description": "Technical assessment for Capitec Test Automation Engineer post",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "clean": "npx rimraf dist test-results playwright-report node_modules/.cache",
+    "build": "tsc",
+    "setup": "npm install && npm run build && npm run clean",
+    "test:OnlineStore": "npx playwright test --grep @ui --workers=4",
+    "test:API": "npx playwright test --grep @api --workers=4",
+    "test:Database": "npx playwright test --grep @db --workers=4",
+    "test": "npx playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.54.1",
-    "@types/node": "^24.0.14"
+    "@types/node": "^24.0.14",
+    "@types/pg": "^8.15.4",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",  
+    "dotenv": "^17.2.0"
   },
   "dependencies": {
-    "dotenv": "^17.2.0",
-    "typescript": "^5.8.3"
+    "pg": "^8.16.3"
   }
 }

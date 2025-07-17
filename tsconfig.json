@@ -19,6 +19,7 @@
     "paths": {
       "@fixtures/*": ["src/fixtures/*"],
       "@online-store/*": ["src/component/online-store/*"],
+      "@database/*":["src/component/database/*"],
       "@api/*": ["src/component/api/*"],
       "@utils/*": ["src/utils/*"],
     },

@@ -6,6 +6,7 @@ dotenv.config({ path: 'environment/.env'});
 
 export default defineConfig({
   testMatch: ['**/*.test.ts'],
+  testIgnore: ['**/*.js', '**/dist/**', '**/build/**'],
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -20,21 +21,12 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     actionTimeout: 15000,
+    //headless: false, //Remove comment lines to enable this
   },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
     },
 
     /* Test against branded browsers. */
