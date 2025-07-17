@@ -1,24 +1,29 @@
 import { APIRequestContext } from "playwright";
 
+type UserInput = {
+  name: string;
+  job: string;
+  task: string;
+  status: boolean;
+};
 
 export class RegresApiCrud{
 
-     private baseURL = process.env.API_BASE_URL!;
+  private baseURL = process.env.API_BASE_URL!;
 
-    constructor(private request: APIRequestContext){}
 
-     async createRecord(name: string, job: string) {
-    const response = await this.request.post(`${this.baseURL}/users`, {
-      data: { name, job },
-    });
+  constructor(private request: APIRequestContext){}
 
-    if (!response.ok()) throw new Error(`Create failed: ${response.status()}`);
+    async createRecord(inputData: UserInput) {
+      const response = await this.request.post(`${this.baseURL}/users`, {
+        data: inputData,
+      });
 
-    return response.json();
+      if (!response.ok()) throw new Error(`Create failed: ${response.status()}`);
+      return response.json();
   }
 
   async retrieveRecord(id: number) {
-    console.log("URL ", this.baseURL)
     const response = await this.request.get(`${this.baseURL}/${id}`, {
     });
 
@@ -26,20 +31,13 @@ export class RegresApiCrud{
     return response.json();
   }
 
-  async updateRecord(id: number, name: string, job: string) {
+  async updateRecord(id: number, inputData: UserInput) {
     const response = await this.request.put(`${this.baseURL}/users/${id}`, {
-      data: { name, job },
+      data: inputData,
     });
 
     if (!response.ok) throw new Error(`Update failed: ${response.status}`);
     return response.json();
   }
 
-  async deleteRecord(id: number) {
-    const response = await this.request.delete(`${this.baseURL}/users/${id}`, {
-    });
-
-    if (!response.ok) throw new Error(`Delete failed: ${response.status}`);
-    return { success: true };
-  }
 }
