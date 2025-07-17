@@ -12,12 +12,11 @@ git clone https://github.com/Mbasa980415/capitec-assessment.git
 - npm (comes with Node.js)
 
 ## Setup Instructions:
+- use: npm run setup
 
 To: - Install all dependencies using npm install
     - Compile TypeScript using tsc
     - Clean all test/build artifacts
-
-use: npm run setup
 
 ## Run All Tests:
 - npm test
