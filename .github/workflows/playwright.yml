@@ -1,36 +1,107 @@
 name: Playwright Tests
+
 on:
   pull_request:
-    branches: [ main]
+    branches: [main]
+
 jobs:
-  test:
-    timeout-minutes: 60
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Load .env File
+        run: |
+          echo "Loading environment variables..."
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
+          echo "UI_USERNAME=${{ secrets.UI_USERNAME }}" >> $GITHUB_ENV
+          echo "UI_PASSWORD=${{ secrets.UI_PASSWORD }}" >> $GITHUB_ENV
+          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> $GITHUB_ENV
+          echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> $GITHUB_ENV
+          echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+
+  test-ui:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      - uses: actions/checkout@v4
 
-    - name: Load .env File
-      run: |
-        echo "Loading environment variables..."
-        echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
-        echo "UI_USERNAME=${{ secrets.UI_USERNAME }}" >> $GITHUB_ENV
-        echo "UI_PASSWORD=${{ secrets.UI_PASSWORD }}" >> $GITHUB_ENV
-        echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> $GITHUB_ENV
-        echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> $GITHUB_ENV
-        echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> $GITHUB_ENV
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
 
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run UI tests
+        run: npx playwright test --grep @ui
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: ui-report
+          path: playwright-report/
+          retention-days: 30
+
+  test-api:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npx playwright test --grep @api
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: api-report
+          path: playwright-report/
+          retention-days: 30
+
+  test-db:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run DB tests
+        run: npx playwright test --grep @db
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: db-report
+          path: playwright-report/
+          retention-days: 30
