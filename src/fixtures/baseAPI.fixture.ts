@@ -1,5 +1,6 @@
 import { test as baseTest, request, APIRequestContext } from "@playwright/test";
 import { RegresApiCrud } from "@api/page/regresApiCrud.page";
+import {apiAuth} from '@utils/apiAuth.util';
 
 const test = baseTest.extend<{
   apiRequestContext: APIRequestContext;
@@ -7,39 +8,8 @@ const test = baseTest.extend<{
 }>({
   apiRequestContext: async ({}, use) => {
 
-    const authContext = await request.newContext({
-      extraHTTPHeaders: {
-        'Content-Type': 'application/json',
-        'x-api-key': 'reqres-free-v1',
-      },
-    });
-
-    const registerResponse = await authContext.post(`${process.env.API_BASE_URL}/register`, {
-      data: {
-        email: process.env.API_USERNAME,
-        password: process.env.API_PASSWORD,
-      },
-    });
-
-    if (!registerResponse.ok()) {
-      throw new Error(`Registration failed with status: ${registerResponse.status()}`);
-    }    
-
-    const loginResponse = await authContext.post(`${process.env.API_BASE_URL}/login`, {
-      data: {
-        email: process.env.API_USERNAME,
-        password: process.env.API_PASSWORD,
-      },
-    });
-
-    if (!loginResponse.ok()) {
-      throw new Error(`Login failed with status: ${loginResponse.status()}`);
-    }
-
-    const { token } = await loginResponse.json();
-    console.log("Auth token: ", token);
-    await authContext.dispose();
-
+    const token = await apiAuth();
+    
     const context = await request.newContext({
       extraHTTPHeaders: {
         'Authorization': `Bearer ${token}`,
