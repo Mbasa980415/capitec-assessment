@@ -7,6 +7,22 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password123
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
     strategy:
       matrix:
         tag: ["@ui", "@api", "@db"]
@@ -31,11 +47,11 @@ jobs:
           echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> $GITHUB_ENV
           echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> $GITHUB_ENV
           echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "DB_HOST=localhost" >> $GITHUB_ENV
+          echo "DB_PORT=5432" >> $GITHUB_ENV
+          echo "DB_USER=postgres" >> $GITHUB_ENV
+          echo "DB_PASSWORD=password123" >> $GITHUB_ENV
+          echo "DB_NAME=testdb" >> $GITHUB_ENV
 
       - name: Run Playwright tests
         run: npx playwright test --grep ${{ matrix.tag }}
