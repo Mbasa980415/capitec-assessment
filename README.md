@@ -32,22 +32,24 @@ To: - Install all dependencies using npm install
 
 
 ## Local setup:
-- Create folder in root project named 'environment'
+- Create folder named 'environment' in root project 
 - Create .env file under this folder.
 
 ## Variable names under .env file should be:
+
+//for online Store
 - BASE_URL
 - UI_USERNAME
 - UI_PASSWORD
 
+//For API
 - API_BASE_URL
 - API_USERNAME
 - API_PASSWORD
 
+//For Database
 - DB_HOST
 - DB_PORT
 - DB_USER
 - DB_PASSWORD
 - DB_NAME
-
-## NB: Database on GitHub is connected to a supabase setup 
