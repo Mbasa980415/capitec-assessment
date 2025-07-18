@@ -1,4 +1,4 @@
-import type { Client } from 'pg';
+import client, {dbConnection}  from '@utils/dbConnection.util';
 
 type UserInput = {
   title: string;
@@ -8,11 +8,8 @@ type UserInput = {
 
 export class DatabaseHelper {
 
-  constructor(private client: Client) {}
-
-
   async createRecord(input: UserInput) {
-    const record = await this.client.query(
+    const record = await client.query(
       'INSERT INTO tasks (title, completed, user_id) VALUES ($1, $2, $3) RETURNING *;',
       [input.title, input.completed, input.user_id]);
       
@@ -20,7 +17,7 @@ export class DatabaseHelper {
   }
 
   async retrieveRecord(id: number) {
-    const record = await this.client.query('SELECT * FROM tasks WHERE id = $1', [id]);
+    const record = await client.query('SELECT * FROM tasks WHERE id = $1', [id]);
     return record.rows[0];
   }
 
@@ -31,12 +28,21 @@ export class DatabaseHelper {
       throw new Error('Invalid column name');
     }
 
-    const record = await this.client.query(
+    const record = await client.query(
       `UPDATE tasks SET ${column} = $1 WHERE id = $2 RETURNING *;`,
       [value, id]);
       
     return record.rows[0];
   }
 
+  async connectDB(){
+
+    await dbConnection();
+  }
+
+  async closeConnection(){
+    
+    await client.end();
+  }
 
 }
