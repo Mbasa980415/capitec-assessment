@@ -22,7 +22,6 @@ test.afterAll('Clean up and close connection', async({databaseHelper})=>{
 test('Retrieve record from the tasks table @db', async ({ databaseHelper }) => {
 
   const record = await databaseHelper.retrieveRecord(createdId);
-  console.log(record);
   expect(record.id).toBe(createdId);
   expect(record.title).toBe('Complete technical assessment');
 });
@@ -30,8 +29,7 @@ test('Retrieve record from the tasks table @db', async ({ databaseHelper }) => {
 test('Update tasks table complete status @db', async ({ databaseHelper }) => {
   
   const updatedRecord = await databaseHelper.updateRecord(createdId, 'completed', true);
-
   expect(updatedRecord.completed).toBe(true);
-  console.log(updatedRecord);
+
 });
 
