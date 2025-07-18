@@ -1,7 +1,6 @@
 import { test as baseTest, } from '@playwright/test';
 import { OnlineStore } from '@online-store/page/onlineStore.page'; 
 import { DatabaseHelper } from '@database/page/databaseHelper.page';
-import client, { dbConnection } from '@utils/dbConnection.util';
 
 const test = baseTest.extend<{
   onlineStore: OnlineStore;
@@ -14,12 +13,9 @@ const test = baseTest.extend<{
   },
 
   databaseHelper: async ({}, use) =>{
-
-    await dbConnection();
-    const helper = new DatabaseHelper(client);
-
+    const helper = new DatabaseHelper();
     await use(helper);
-    await client.end();
+
   }
 
 });

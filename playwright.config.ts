@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 import dotenv from 'dotenv';
-dotenv.config({ path: 'environment/.env'});
+dotenv.config({ path: 'environment/.env', override: true, quiet: true});
 
 
 export default defineConfig({
