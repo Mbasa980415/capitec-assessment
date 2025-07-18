@@ -30,6 +30,9 @@ To: - Install all dependencies using npm install
 ## Run database (@db) tests:
 - npm run test:Database
 
+## Playwright report:
+- npx playwright show-report
+- npx playwright show-report <report name>
 
 ## Local setup:
 - Create folder named 'environment' in root project 
