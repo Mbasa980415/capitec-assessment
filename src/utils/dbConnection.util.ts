@@ -14,12 +14,6 @@ export async function dbConnection(){
         await client.connect();
         console.log('DB connected successfully!');
 
-        await client.query(`
-        CREATE TABLE IF NOT EXISTS tasks (
-        id SERIAL PRIMARY KEY,
-        title TEXT,
-        completed BOOLEAN,
-        user_id INT); `);
     } 
     catch (err) {
         console.error('DB connection failed! :', err);
