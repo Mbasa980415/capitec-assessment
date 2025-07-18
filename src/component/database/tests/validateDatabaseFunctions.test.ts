@@ -1,36 +1,34 @@
 import test, { expect } from '@fixtures/baseTest.fixture';
+import { createTable, dropTable } from '@utils/manageDB.util';
 
 let createdId: number;
 
-test('Create record in tasks table @db', async ({ databaseHelper }) => {
-  const input = {
-    title: 'Complete technical assessment',
-    completed: false,
-    user_id: 1,
-  };
-
-  const record = await databaseHelper.createRecord(input);
-
-
-  expect(record).toHaveProperty('id');
-  expect(record.title).toBe(input.title);
-  expect(record.completed).toBe(input.completed);
-  expect(record.user_id).toBe(input.user_id);
-  
+test.beforeAll('Setup connection and data', async({databaseHelper})=>{
+    await databaseHelper.connectDB();
+    await createTable();
+    const record = await databaseHelper.createRecord({
+      title: 'Complete technical assessment',
+      completed: false,
+      user_id: 1,
+    });
+    createdId = record.id;
 });
 
-//NB: in the below tests createdId can be updated with the Id of existing row. 
+test.afterAll('Clean up and close connection', async({databaseHelper})=>{
+  await dropTable();
+  await databaseHelper.closeConnection();
+});
 
 test('Retrieve record from the tasks table @db', async ({ databaseHelper }) => {
-  createdId = 37
+
   const record = await databaseHelper.retrieveRecord(createdId);
+  console.log(record);
   expect(record.id).toBe(createdId);
   expect(record.title).toBe('Complete technical assessment');
 });
 
 test('Update tasks table complete status @db', async ({ databaseHelper }) => {
   
-  createdId = 37
   const updatedRecord = await databaseHelper.updateRecord(createdId, 'completed', true);
 
   expect(updatedRecord.completed).toBe(true);
