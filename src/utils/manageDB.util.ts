@@ -9,12 +9,10 @@ export async function createTable() {
       user_id INT
     );
   `);
-  console.log('Table created successfully');
 }
 
 export async function dropTable() {
   await client.query(`
-    DROP TABLE IF EXISTS tasks;
+    DROP TABLE IF EXISTS tasks CASCADE;
   `);
-  console.log('Table dropped successfully');
 }
